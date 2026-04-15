@@ -31,57 +31,30 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-*/
+#                                                                             */
+#ifndef MEF_CONTROL_H
+#define MEF_CONTROL_H
 
 /*==================[inclusions]=============================================*/
 
-#include "SD2_board.h"
-#include "board.h"
-#include "mefModo.h"
-#include "mefControl.h"
-#include "mefAutos.h"
-#include "key.h"
-#include "lightSensor.h"
+/*==================[cplusplus]==============================================*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*==================[macros and definitions]=================================*/
+/*==================[macros and typedef]=====================================*/
 
-/*==================[internal data declaration]==============================*/
+/*==================[external data declaration]==============================*/
 
-/*==================[internal functions declaration]=========================*/
+/*==================[external functions declaration]=========================*/
+extern void mefControl_init(void);
+extern void mefControl(void);
+extern void mefControl_task1ms(void);
 
-/*==================[internal functions definition]==========================*/
-
-int main(void) {
-
-    BOARD_BootClockRUN();
-    board_init();
-	BOARD_InitDebugConsole();
-
-	key_init();
-
-	/* systick cada 1 ms */
-	SysTick_Config(SystemCoreClock / 1000U);
-
-	mefModo_init();
-	mefControl_init();
-	mefAutos_init();
-	lightSensor_init();
-
-	while (1)
-	{
-	    mefModo();
-	    mefControl();
-	    mefAutos();
-	}
+/*==================[cplusplus]==============================================*/
+#ifdef __cplusplus
 }
+#endif
 
-void SysTick_Handler(void)
-{
-	key_periodicTask1ms();
-
-	mefModo_task1ms();
-
-	mefControl_task1ms();
-
-	mefAutos_task1ms();
-}
+/*==================[end of file]============================================*/
+#endif /* MEF_CONTROL_H */

@@ -31,57 +31,37 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-*/
+#                                                                             */
+#ifndef LIGHT_SENSOR_H
+#define LIGHT_SENSOR_H
 
 /*==================[inclusions]=============================================*/
 
-#include "SD2_board.h"
-#include "board.h"
-#include "mefModo.h"
-#include "mefControl.h"
-#include "mefAutos.h"
-#include "key.h"
-#include "lightSensor.h"
+/*==================[cplusplus]==============================================*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*==================[macros and definitions]=================================*/
+/*==================[macros and typedef]=====================================*/
 
-/*==================[internal data declaration]==============================*/
-
-/*==================[internal functions declaration]=========================*/
-
-/*==================[internal functions definition]==========================*/
-
-int main(void) {
-
-    BOARD_BootClockRUN();
-    board_init();
-	BOARD_InitDebugConsole();
-
-	key_init();
-
-	/* systick cada 1 ms */
-	SysTick_Config(SystemCoreClock / 1000U);
-
-	mefModo_init();
-	mefControl_init();
-	mefAutos_init();
-	lightSensor_init();
-
-	while (1)
-	{
-	    mefModo();
-	    mefControl();
-	    mefAutos();
-	}
-}
-
-void SysTick_Handler(void)
+typedef enum
 {
-	key_periodicTask1ms();
+    LIGHT_SENSOR_LEVEL_LOW = 0,
+    LIGHT_SENSOR_LEVEL_MED,
+    LIGHT_SENSOR_LEVEL_HIGH
+}lightSensor_level_enum;
 
-	mefModo_task1ms();
+/*==================[external data declaration]==============================*/
 
-	mefControl_task1ms();
+/*==================[external functions declaration]=========================*/
+extern void lightSensor_init(void);
+extern lightSensor_level_enum lightSensor_getLevel(void);
+extern void lightSensor_task1ms(void);
 
-	mefAutos_task1ms();
+/*==================[cplusplus]==============================================*/
+#ifdef __cplusplus
 }
+#endif
+
+/*==================[end of file]============================================*/
+#endif /* LIGHT_SENSOR_H */
